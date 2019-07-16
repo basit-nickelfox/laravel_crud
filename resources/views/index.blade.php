@@ -1,8 +1,10 @@
 @extends('parent')
 @section('content')
-<div class="table-responsive">
-    <h2>Laravel Crud Operations</h2>
-    <table class="table table-hover table-dark table-striped" id="user_table">
+
+
+<div class="table-responsive" >
+    <h2 style="text-align: center; color:white;">Laravel Crud Operations</h2>
+    <table class="table table-hover table-dark table-striped" id="user_table" style="background-color:white">
         <thead>
             <tr>
                 <th scope="col">id</th>
@@ -70,7 +72,7 @@
                         url = url.replace('id', full.id);
                         return '<div class="d-flex">' +
                             '<a href="' + url + '" class="text-primary mr-45 fa fa-edit mt-1 "></a>' + '<span>   </span>'+
-                            '<a href="#" id="' +data+ '" class="text-danger delete-button ml-15"><i class="fa fa-trash"><i></a>' +
+                            '<a href="JavaScript:Void(0);" id="' +data+ '" class="text-danger delete-button ml-15"><i class="fa fa-trash"><i></a>' +
                             '</div>';
                     }
                 },
