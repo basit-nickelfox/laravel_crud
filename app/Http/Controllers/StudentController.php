@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Student;
+use App\student;
 
 class StudentController extends Controller
 {
@@ -14,7 +14,7 @@ class StudentController extends Controller
      */
     public function index()
     {
-        
+        return student::all();
     }
 
     /**

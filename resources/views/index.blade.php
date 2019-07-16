@@ -1,50 +1,89 @@
-<html lang="en">
+@extends('parent')
+@section('content')
+<div class="table-responsive">
+    <h2>Laravel Crud Operations</h2>
+    <table class="table table-hover table-dark table-striped" id="user_table">
+        <thead>
+            <tr>
+                <th scope="col">id</th>
+                <th scope="col">Image</th>
+                <th scope="col">Name</th>
+                <th scope="col">Contact</th>
+                <th scope="col">Email</th>
+                <th scope="col">Address</th>
+                <th scope="col">Department</th>
+                <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
 
-<head>
-    <title>Laravel DataTables Tutorial Example</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-</head>
+        </tbody>
+    </table>
 
-<body>
-    <div class="container">
-        <div class="table-responsive">
-            <h2>Laravel Crud Operations</h2>
-            <table class="table table-striped table-dark table-hover" id="table">
-                <thead>
-                    <tr>
+</div>
+<script type="text/javascript">
+  
+    $(document).ready(function() {
 
-                        <th>Id</th>
-                        <th>Image</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Address</th>
-                        <th>Number</th>
-                        <th>Department</th>
-                    </tr>
-                </thead>
-            </table>
-        </div>
-    </div>
+        $('#user_table').DataTable({ //initliaze datatable plugin
+
+            processing: true,
+            processing: true,
+            ajax: {
+                url: "{{url('api/getUsers')}}",
+                type: 'GET',
+                datatype: 'JSON',
+                dataSrc: function(json) {
+                    console.log(json);
+                    return json;
+                }
+            },
+            columns: [{
+                    data: 'id',
+                },
+                {
+                    data: 'image',
+                    render: function(data, type, full, meta) {
+                        return "<img src={{URL::to('/')}}/images/" + 'profile.png' +
+                            " width= '70' class='img-thumbnail'/>";
+                    }
+                },
+                {
+                    data: 'name',
+                },
+                {
+                    data: 'phone',
+                },
+                {
+                    data: 'email',
+                },
+                {
+                    data: 'address',
+                },
+                {
+                    data: 'department',
+                },
+                {
+                    data: 'id',
+                    render: function(data, type, full, meta) {
+                        var url = '{{ url("/admin/user/edit", "id") }}';
+                        url = url.replace('id', full.id);
+                        return '<div class="d-flex">' +
+                            '<a href="' + url + '" class="text-primary mr-45 fa fa-edit mt-1 "></a>' + '<span>   </span>'+
+                            '<a href="#" id="' +data+ '" class="text-danger delete-button ml-15"><i class="fa fa-trash"><i></a>' +
+                            '</div>';
+                    }
+                },
+
+            ]
+
+        });
+        $(document).on("click",'.delete-button',function(){
+        //    console.log('hello');
+         console.log(this.id);
+       });
+       
+    });
    
-</body>
-
-</html>
-
-<script>
-        //  $(document).ready(function() {
-        //        $('#table').DataTable({
-        //        processing: true,
-        //        serverSide: true,
-        //        ajax: '{{ url('index') }}',
-        //        columns: [
-        //                 { data: 'id', name: 'id' },
-        //                 { data: 'name', name: 'name' },
-        //                 { data: 'email', name: 'email' }
-        //              ]
-        //     });
-        //  });
-         </script> 
+</script>
+@endsection
