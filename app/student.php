@@ -10,6 +10,7 @@ class student extends Model
      'name',
      'phone',
      'address',
+     'email',
      'image',
      'department',
     ];

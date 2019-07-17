@@ -2,9 +2,12 @@
 @section('content')
 
 
-<div class="table-responsive" >
+<div class="table-responsive">
     <h2 style="text-align: center; color:white;">Laravel Crud Operations</h2>
-    <table class="table table-hover table-dark table-striped" id="user_table" style="background-color:white">
+    <div style="float:right;">
+        <button type="button" id="create_record" class="btn btn-success btn-sm btn-default px-5 fa fa-plus" style="radius:50%; padding:5px 30px; margin-bottom:10px"></button>
+    </div>
+    <table class="table table-hover table-dark table-striped " id="user_table" style="background-color:white">
         <thead>
             <tr>
                 <th scope="col">id</th>
@@ -23,8 +26,66 @@
     </table>
 
 </div>
+
+<!-- Button trigger modal -->
+<!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+  Launch demo modal
+</button> -->
+
+<!-- Modal -->
+<div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="exampleModalLongTitle" align="center">Add New Record</h3>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="margin:0px 20px">
+                <span id="form_result"></span>
+                <form action="post" id="sample_form" class="form-horizontal" enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Name</label>
+                        <input type="text" name="name" class="form-control" id="name" aria-describedby="emailHelp" placeholder="Name">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Contact</label>
+                        <input type="text" class="form-control" name="contact" id="contact" placeholder="Contact">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Email address</label>
+                        <input type="email" class="form-control" name="email" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+                        <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Address</label>
+                        <input type="text" class="form-control" name="address" id="address" placeholder="Address">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Department</label>
+                        <input type="text" class="form-control" name="department" id="department" placeholder="Department">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleFormControlFile1">Choose Profile Picture</label>
+                        <input type="file" class="form-control-file" name="image" id="image">
+                    </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <input type="submit" id="add" class="btn btn-primary" value="Add"></button>
+                <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+
 <script type="text/javascript">
-  
     $(document).ready(function() {
 
         $('#user_table').DataTable({ //initliaze datatable plugin
@@ -32,7 +93,7 @@
             processing: true,
             processing: true,
             ajax: {
-                url: "{{url('api/getUsers')}}",
+                url: "{{url('api/getStudents')}}",
                 type: 'GET',
                 datatype: 'JSON',
                 dataSrc: function(json) {
@@ -46,7 +107,7 @@
                 {
                     data: 'image',
                     render: function(data, type, full, meta) {
-                        return "<img src={{URL::to('/')}}/images/" + 'profile.png' +
+                        return "<img src={{URL::to('/')}}/images/" + data +
                             " width= '70' class='img-thumbnail'/>";
                     }
                 },
@@ -71,8 +132,8 @@
                         var url = '{{ url("/admin/user/edit", "id") }}';
                         url = url.replace('id', full.id);
                         return '<div class="d-flex">' +
-                            '<a href="' + url + '" class="text-primary mr-45 fa fa-edit mt-1 "></a>' + '<span>   </span>'+
-                            '<a href="JavaScript:Void(0);" id="' +data+ '" class="text-danger delete-button ml-15"><i class="fa fa-trash"><i></a>' +
+                            '<a href="' + url + '" class="text-primary mr-45 fa fa-edit mt-1 "></a>' + '<span>   </span>' +
+                            '<a href="JavaScript:Void(0);" id="' + data + '" class="text-danger delete-button ml-15"><i class="fa fa-trash"><i></a>' +
                             '</div>';
                     }
                 },
@@ -80,12 +141,50 @@
             ]
 
         });
-        $(document).on("click",'.delete-button',function(){
-        //    console.log('hello');
-         console.log(this.id);
-       });
-       
+        //form modal working
+        $('#create_record').click(function() {
+
+            $('#formModal').modal('show');
+        });
+
+        //.....on modal form submir execute this
+        $('#sample_form').on('submit', function(event) {
+            event.preventDefault();
+            if ($('#add').val() == 'Add') {
+            
+
+                $.ajax({
+                    url: '{{url("api/addStudents")}}',
+                    method: "POST",
+                    data: new FormData(this),
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    dataType:"json",
+                    success:function(data){
+                        var html='';
+                        if(data.errors){
+                            html= '<div class="alert alert-danger">';
+                            for(var count=0 ;count< data.errors.length;count++){
+                                html+='<p>'+data.errors[count] +'</p>';
+                            }
+                            html+='</div>';   
+                        }
+                        if(data.success){
+                            html= '<div class="alert alert-success">'+data.success+'</div>';
+                             $('#sample_form')[0].reset();
+                            $('#user_table').DataTable().ajax.reload();
+                       
+                        }
+                        $('#form_result').html(html);
+                    }
+
+
+                })
+            }
+
+        });
+
     });
-   
 </script>
 @endsection
