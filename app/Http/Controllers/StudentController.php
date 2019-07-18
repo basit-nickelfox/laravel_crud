@@ -85,7 +85,8 @@ class StudentController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data=student::findorfail($id);
+        return $data;
     }
 
     /**
@@ -97,7 +98,49 @@ class StudentController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $image_name=$request->hidden_image;
+        $image=$request->file('image');
+        if($image!=''){
+            $rules=array(
+                'name'         =>'required',
+                'contact'         =>'required',
+                'email'         =>'required',
+                'image'         =>'required|image',
+                'department'    =>'required',
+                'address'       =>'required',
+              );
+              $error=Validator::make($request->all(),$rules);
+               if($error->fails()){
+                   return response()->json(['errors'=>$error->errors()->all()]);
+               }
+    
+        
+          $image_name =rand() . '.' . $image->getClientOriginalExtension();
+          $image->move(public_path('images'),$image_name);
+         
+        }else{
+            $rules=array(
+                'name'         =>'required',
+                'contact'         =>'required',
+                'email'         =>'required',
+                'department'    =>'required',
+                'address'       =>'required',
+              );
+              $error=Validator::make($request->all(),$rules);
+               if($error->fails()){
+                   return response()->json(['errors'=>$error->errors()->all()]);
+               } 
+        }
+        $form_Data=array(
+          'name'      => $request->name,  
+          'email'     => $request->email,   
+          'phone'     => $request->contact,   
+          'image'     => $image_name,   
+          'department'=> $request->department,
+          'address'   => $request->address,
+        );
+        Student::whereId($id)->update($form_Data);
+        return response()->json(['success'=>'Data Updated successfully']);
     }
 
     /**

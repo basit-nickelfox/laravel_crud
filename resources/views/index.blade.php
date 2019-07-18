@@ -37,7 +37,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title" id="exampleModalLongTitle" align="center">Add New Record</h3>
+                <h3 class="modal-title" id="title" align="center">Add New Record</h3>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -70,8 +70,10 @@
                     <div class="form-group">
                         <label for="exampleFormControlFile1">Choose Profile Picture</label>
                         <input type="file" class="form-control-file" name="image" id="image">
+                        <span id="store_image"></span>
+                        <input type='hidden' name='hidden_image' id="hidden_image" class="form-control-file"/>
                     </div>
-
+                    <input type="hidden" class="form-control-file" name="hidden" id="hidden_id">
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -129,10 +131,10 @@
                 {
                     data: 'id',
                     render: function(data, type, full, meta) {
-                        var url = '{{ url("/admin/user/edit", "id") }}';
-                        url = url.replace('id', full.id);
+                        // var url = '{{ url("/admin/user/edit", "id") }}';
+                        // url = url.replace('id', full.id);
                         return '<div class="d-flex">' +
-                            '<a href="' + url + '" class="text-primary mr-45 fa fa-edit mt-1 "></a>' + '<span>   </span>' +
+                            '<span class="text-primary mr-45 fa fa-edit mt-1 edit" id="' + data + '" > </span>' +
                             '<a href="JavaScript:Void(0);" id="' + data + '" class="text-danger delete-button ml-15"><i class="fa fa-trash"><i></a>' +
                             '</div>';
                     }
@@ -151,7 +153,7 @@
         $('#sample_form').on('submit', function(event) {
             event.preventDefault();
             if ($('#add').val() == 'Add') {
-            
+
 
                 $.ajax({
                     url: '{{url("api/addStudents")}}',
@@ -160,21 +162,89 @@
                     cache: false,
                     contentType: false,
                     processData: false,
-                    dataType:"json",
-                    success:function(data){
-                        var html='';
-                        if(data.errors){
-                            html= '<div class="alert alert-danger">';
-                            for(var count=0 ;count< data.errors.length;count++){
-                                html+='<p>'+data.errors[count] +'</p>';
+                    dataType: "json",
+                    success: function(data) {
+                        var html = '';
+                        if (data.errors) {
+                            html = '<div class="alert alert-danger">';
+                            for (var count = 0; count < data.errors.length; count++) {
+                                html += '<p>' + data.errors[count] + '</p>';
                             }
-                            html+='</div>';   
+                            html += '</div>';
                         }
-                        if(data.success){
-                            html= '<div class="alert alert-success">'+data.success+'</div>';
-                             $('#sample_form')[0].reset();
+                        if (data.success) {
+                            html = '<div class="alert alert-success">' + data.success + '</div>';
+                            $('#sample_form')[0].reset();
                             $('#user_table').DataTable().ajax.reload();
-                       
+
+                        }
+                        $('#form_result').html(html);
+                    }
+
+
+                })
+            }
+
+        });
+
+        //...................edit...................................
+        $(document).on('click', '.edit', function() {
+            $('#formModal').modal('show');
+            var id = $(this).attr('id');
+
+            var url = '{{url("api/editStudent/id/edit")}}';
+            url = url.replace('id', id);
+            $('#form_result').html('');
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                success: function(data) {
+                    $('#name').val(data.name);
+                    $('#email').val(data.email);
+                    $('#contact').val(data.phone);
+                    $('#address').val(data.address);
+                    $('#department').val(data.department);
+                    $('#hidden_id').val(data.id);
+                    $('#hidden_image').val(data.image);
+                    $('#store_image').html("<img src={{URL::to('/')}}/images/" + data.image + " width='70' height='70' class='img-thumbnail'>");
+                    $('#title').text('UPDATE RECORD');
+                    $('#add').val('Edit');
+
+                }
+            })
+
+        });
+
+        $('#sample_form').on('submit', function(event) {
+            event.preventDefault();
+            if ($('#add').val() == 'Edit') {
+                var id = $("#hidden_id").val();
+                console.log(id);
+                var url = '{{url("api/updateStudent/id")}}';
+                url = url.replace('id', id);
+                $.ajax({
+                    url: url,
+                    method: "POST",
+                    data: new FormData(this),
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    dataType: "json",
+                    success: function(data) {
+                        var html = '';
+                        if (data.errors) {
+                            html = '<div class="alert alert-danger">';
+                            for (var count = 0; count < data.errors.length; count++) {
+                                html += '<p>' + data.errors[count] + '</p>';
+                            }
+                            html += '</div>';
+                        }
+                        if (data.success) {
+                            html = '<div class="alert alert-success">' + data.success + '</div>';
+                            $('#sample_form')[0].reset();
+                            $('#store_image').html('');
+                            $('#user_table').DataTable().ajax.reload();
+
                         }
                         $('#form_result').html(html);
                     }
