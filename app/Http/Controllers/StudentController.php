@@ -151,6 +151,7 @@ class StudentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $data=student::findorfail($id);
+        $data->delete();
     }
 }

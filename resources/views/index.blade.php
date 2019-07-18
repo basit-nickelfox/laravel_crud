@@ -71,7 +71,7 @@
                         <label for="exampleFormControlFile1">Choose Profile Picture</label>
                         <input type="file" class="form-control-file" name="image" id="image">
                         <span id="store_image"></span>
-                        <input type='hidden' name='hidden_image' id="hidden_image" class="form-control-file"/>
+                        <input type='hidden' name='hidden_image' id="hidden_image" class="form-control-file" />
                     </div>
                     <input type="hidden" class="form-control-file" name="hidden" id="hidden_id">
             </div>
@@ -84,6 +84,31 @@
         </div>
     </div>
 </div>
+
+<!-- ...........................................modal for delete................................................... -->
+<!-- Modal -->
+<div class="modal fade" id="delete_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="exampleModalLongTitle" align="center">Confirmation</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <h4 align="center" style="margin:0;color:red;">Are you sure you want to remove this record?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" name="delete_button" id="delete_button">Delete</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
 
 
@@ -134,8 +159,8 @@
                         // var url = '{{ url("/admin/user/edit", "id") }}';
                         // url = url.replace('id', full.id);
                         return '<div class="d-flex">' +
-                            '<span class="text-primary mr-45 fa fa-edit mt-1 edit" id="' + data + '" > </span>' +
-                            '<a href="JavaScript:Void(0);" id="' + data + '" class="text-danger delete-button ml-15"><i class="fa fa-trash"><i></a>' +
+                            '<h3><span class="text-primary mr-45 fa fa-edit mt-1 edit" id="' + data + '" > </span> <span></span>' +
+                            '<span id="' + data + '" class="text-danger delete ml-15"><i class="fa fa-trash"><i></span></h3>' +
                             '</div>';
                     }
                 },
@@ -253,6 +278,30 @@
                 })
             }
 
+        });
+
+        $(document).on('click', '.delete', function() {
+            $('#delete_modal').modal('show');
+            var id = $(this).attr('id');
+            var url = '{{url("api/deleteStudent/id")}}';
+            url = url.replace('id', id);
+            $('#delete_button').click(function() {
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    beforeSend: function() {
+                        $('#delete_button').text('Deleting...');
+                    },
+                    success: function(data) {
+                        setTimeout(function() {
+                            $('#delete_modal').modal('hide');
+                            $('#user_table').DataTable().ajax.reload();
+                        }, 2000);
+                    }
+                });
+
+
+            });
         });
 
     });
