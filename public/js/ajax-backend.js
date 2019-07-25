@@ -130,6 +130,7 @@
             event.preventDefault();
             if ($('#add').val() == 'Edit') {
                 var id = $("#hidden_id").val();
+                $('#method_spoof').val('PUT');
                 console.log(id);
                 var url = 'api/updateStudent/id';
                 url = url.replace('id', id);
@@ -175,6 +176,9 @@
                 $.ajax({
                     url: url,
                     type: 'POST',
+                    data: {
+                        '_method': 'DELETE'
+                    },
                     beforeSend: function() {
                         $('#delete_button').text('Deleting...');
                     },

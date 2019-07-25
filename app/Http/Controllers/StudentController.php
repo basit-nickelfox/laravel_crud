@@ -132,6 +132,7 @@ class StudentController extends Controller
                } 
         }
         $form_Data=array(
+           
           'name'      => $request->name,  
           'email'     => $request->email,   
           'phone'     => $request->contact,   
