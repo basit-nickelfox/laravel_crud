@@ -3,7 +3,7 @@ $(document).ready(function() {
     $('#user_table').DataTable({ //initliaze datatable plugin
 
         processing: true,
-        processing: true,
+        responsive: true,
         ajax: {
             url: 'api/getStudents',
             type: 'GET',

@@ -6,7 +6,7 @@
 
 <div class="table-responsive">
     <h2 style="text-align: center; color:white;">Laravel Crud Operations</h2>
-    <div style="float:right;">
+    <div style="float:right">
         <button type="button" id="create_record" class="btn btn-success btn-sm btn-default px-5 fa fa-plus" style="radius:50%; padding:5px 30px; margin-bottom:10px"></button>
     </div>
     <table class="table table-hover table-dark table-striped " id="user_table" style="background-color:white">
