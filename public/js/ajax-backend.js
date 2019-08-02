@@ -56,8 +56,11 @@
         });
         //form modal working
         $('#create_record').click(function() {
-
             $('#formModal').modal('show');
+            $('#sample_form')[0].reset();
+            $('#store_image').html('');
+            $('#form_result').html('');
+            $('#title').text('ADD NEW RECORD');
         });
 
         //.....on modal form submir execute this
@@ -121,7 +124,7 @@
                     $('#title').text('UPDATE RECORD');
                     $('#add').val('Edit');
 
-                }
+                } 
             })
 
         });

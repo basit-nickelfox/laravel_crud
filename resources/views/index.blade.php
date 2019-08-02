@@ -69,7 +69,7 @@
                     <div class="form-group">
                         <label for="exampleInputPassword1">Department</label>
                         <input type="text" class="form-control" name="department" id="department" placeholder="Department">
-                    </div>
+                    </div> 
                     <div class="form-group">
                         <label for="exampleFormControlFile1">Choose Profile Picture</label>
                         <input type="file" class="form-control-file" name="image" id="image">
