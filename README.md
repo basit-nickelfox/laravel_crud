@@ -4,7 +4,7 @@ Image upload included...<br>
 <h3>Vist : <a href="https://crudoperationslaravel.000webhostapp.com/">Laravel_Crud</a><br>
 #Here are the screen shots of the web Application<br>
 <p align="left">
- <img src="screenshots/view.png" height="400">
+ <img src="view.png" height="400">
   <img src="screenshots/addRecord.png" height="400">
   <img src="screenshots/errorMsg.png" height="400">
   <img src="screenshots/search.png" height="400">
