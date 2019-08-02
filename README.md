@@ -1,4 +1,4 @@
-# Laravel Crud operations with Data table and ajax (using api's) 
+# Laravel Crud operations with Data table and ajax using api's
 Laravel dynamic crud operations create, update, delete and view using ajax with data tables (api's).<br>
 Image upload included...<br>
 <div align="center">
