@@ -104,6 +104,9 @@
         //...................edit...................................
         $(document).on('click', '.edit', function() {
             $('#formModal').modal('show');
+            $('#title').text('UPDATE RECORD');
+            $('#add').val('Edit');
+            $('#store_image').html("<img src=/images/" + data.image + " width='70' height='70' class='img-thumbnail'>");
             var id = $(this).attr('id');
 
             var url = 'api/editStudent/id/edit';
@@ -120,9 +123,8 @@
                     $('#department').val(data.department);
                     $('#hidden_id').val(data.id);
                     $('#hidden_image').val(data.image);
-                    $('#store_image').html("<img src=/images/" + data.image + " width='70' height='70' class='img-thumbnail'>");
-                    $('#title').text('UPDATE RECORD');
-                    $('#add').val('Edit');
+                   
+                   
 
                 } 
             })
