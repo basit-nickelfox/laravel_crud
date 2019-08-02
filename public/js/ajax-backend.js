@@ -176,7 +176,7 @@ $(document).ready(function() {
     $(document).on('click', '.delete', function() {
         $('#delete_modal').modal('show');
         var id = $(this).attr('id');
-        var url = 'api/deleteStudent/id")';
+        var url = 'api/deleteStudent/id';
         url = url.replace('id', id);
         $('#delete_button').click(function() {
             $.ajax({
@@ -193,11 +193,13 @@ $(document).ready(function() {
                         $('#delete_modal').modal('hide');
                         $('#user_table').DataTable().ajax.reload();
                     }, 2000);
+                   
                 }
             });
 
 
         });
+        $('#delete_button').text('Delete');
     });
 
 });
